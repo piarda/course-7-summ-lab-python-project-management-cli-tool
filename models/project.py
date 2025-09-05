@@ -1,16 +1,36 @@
 # models/project.py
 
-class Project:
-    _id_counter = 1
+from datetime import datetime
+from models.entity import Entity
 
+class Project(Entity):
     def __init__(self, title, description, due_date, user_name):
-        self.id = Project._id_counter
-        Project._id_counter =+ 1
-        self.title = title
+        super().__init__()
+        self.title = title  # Validates via Setter
         self.description = description
-        self.due_date = due_date
+        self.due_date = due_date    # Validates via Setter
         self.user_name = user_name
         self.tasks = []
+
+    @property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, value):
+        self._title = value.strip() if value else ""
+
+    @property
+    def due_date(self):
+        return self._due_date
+
+    @due_date.setter
+    def due_date(self, value):
+        try:
+            datetime.strptime(value, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError("Due date must be in YYYY-MM-DD format.")
+        self._due_date = value
 
     def to_dict(self):
         return {

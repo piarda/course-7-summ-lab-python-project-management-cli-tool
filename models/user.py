@@ -1,14 +1,24 @@
 # models/user.py
 
-class User:
-    _id_counter = 1
+from models.entity import Entity
 
+class User(Entity):
     def __init__(self, name, email):
-        self.id = User._id_counter
-        User._id_counter += 1
+        super().__init__()
         self.name = name
-        self.email = email
-        self.projects = []  # list of project IDs / objects
+        self._email = None  # Protected attribute
+        self.email = email  # Use setter to validate
+        self.projects = []
+
+    @property
+    def email(self):
+        return self._email
+
+    @email.setter
+    def email(self, value):
+        if "@" not in value or "." not in value:
+            raise ValueError("Invalid email address")
+        self._email = value
 
     def to_dict(self):
         return {

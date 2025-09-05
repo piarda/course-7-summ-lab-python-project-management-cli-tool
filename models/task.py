@@ -1,11 +1,10 @@
 # models/task.py
 
-class Task:
-    _id_counter = 1
+from models.entity import Entity
 
+class Task(Entity):
     def __init__(self, title, status, assigned_to, project_title):
-        self.id = Task._id_counter
-        Task._id_counter += 1
+        super().__init__()
         self.title = title
         self.status = status
         self.assigned_to = assigned_to

@@ -129,7 +129,29 @@ def complete_task(task_id):
     
     save_data(TASKS_FILE, tasks_data)
 
+def update_id_counters():
+    users_data = load_data(USERS_FILE)
+    projects_data = load_data(PROJECTS_FILE)
+    tasks_data = load_data(TASKS_FILE)
+
+    if users_data:
+        User._id_counter = max(user["id"] for user in users_data) + 1
+    else:
+        User._id_counter = 1
+
+    if projects_data:
+        Project._id_counter = max(project["id"] for project in projects_data) + 1
+    else:
+        Project._id_counter = 1
+
+    if tasks_data:
+        Task._id_counter = max(task["id"] for task in tasks_data) + 1
+    else:
+        Task._id_counter = 1
+
 if __name__ == "__main__":
+    update_id_counters()
+
     parser = argparse.ArgumentParser(description="Project Management CLI Tool")
     subparsers = parser.add_subparsers(dest="command")
 
