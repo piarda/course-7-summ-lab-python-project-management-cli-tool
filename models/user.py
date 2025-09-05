@@ -5,10 +5,20 @@ from models.entity import Entity
 class User(Entity):
     def __init__(self, name, email):
         super().__init__()
-        self.name = name
+        self.name = name    # Use setter to validate
         self._email = None  # Protected attribute
         self.email = email  # Use setter to validate
         self.projects = []
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        if not value or not value.strip():
+            raise ValueError("User name cannot be empty.")
+        self._name = value.strip()
 
     @property
     def email(self):
@@ -16,6 +26,7 @@ class User(Entity):
 
     @email.setter
     def email(self, value):
+        value = value.strip()
         if "@" not in value or "." not in value:
             raise ValueError("Invalid email address")
         self._email = value

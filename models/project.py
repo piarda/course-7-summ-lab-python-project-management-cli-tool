@@ -18,7 +18,9 @@ class Project(Entity):
 
     @title.setter
     def title(self, value):
-        self._title = value.strip() if value else ""
+        if not value or not value.strip():
+            raise ValueError("Project title cannot be empty.")
+        self._title = value.strip()
 
     @property
     def due_date(self):

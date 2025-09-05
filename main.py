@@ -1,7 +1,6 @@
 # main.py
 
 import argparse
-import os
 
 from models.user import User
 from models.project import Project
@@ -21,7 +20,7 @@ def add_user(name, email):
     new_user = User(name, email)    # Creates new user
     users_data.append(new_user.to_dict())   # Adds new user to data list
     save_data(USERS_FILE, users_data)   # Saves updated list of users
-    print(f"User added: {new_user}")
+    console.print(f"[green]User added:[/] {new_user}")
 
 def list_users():
     users_data = load_data(USERS_FILE)
@@ -44,7 +43,7 @@ def add_project(user_name, title, description, due_date):
     users_data = load_data(USERS_FILE)
 
     # Validation for existing user
-    if not any(user["name"] == user_name for user in users_data):
+    if not any(user["name"].strip().lower() == user_name.strip().lower() for user in users_data):   # Upper and lowercase spellings are equal
         console.print(f"[bold red]Error:[/] User '{user_name}' does not exist.")
         return
 
@@ -178,7 +177,7 @@ if __name__ == "__main__":
     add_task_parser.add_argument("--project", required=True, help="Project title associated with task")
     add_task_parser.add_argument("--title", required=True, help="Title of the task")
     add_task_parser.add_argument("--assigned", required=True, help="User assigned to the task")
-    add_task_parser.add_argument("--status", default="incomplete", help="Status of the task (default: incomplete)")
+    add_task_parser.add_argument("--status", choices=["incomplete", "complete"], default="incomplete", help="Status of the task (default: incomplete)")
 
     # list-tasks command
     list_tasks_parser = subparsers.add_parser("list-tasks", help="List all tasks")
